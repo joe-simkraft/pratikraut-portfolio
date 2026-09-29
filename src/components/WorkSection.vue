@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import SectionShell from './SectionShell.vue'
 import DecryptText from './DecryptText.vue'
+import RadarSweep from './kit/RadarSweep.vue'
 import { projects } from '../config'
 </script>
 
 <template>
-  <SectionShell id="work" label="selected work" v-slot="{ revealed }">
+  <SectionShell id="work" label="selected work" divider="a">
+    <template #bg>
+      <RadarSweep />
+    </template>
+
+    <template #default="{ revealed }">
     <ol class="list">
       <li v-for="(project, i) in projects" :key="project.title" class="item">
         <span class="idx" aria-hidden="true">{{ String(i + 1).padStart(2, '0') }}</span>
@@ -45,6 +51,7 @@ import { projects } from '../config'
         <span class="year">{{ project.year }}</span>
       </li>
     </ol>
+    </template>
   </SectionShell>
 </template>
 
@@ -55,6 +62,16 @@ import { projects } from '../config'
   padding: 0;
 }
 
+/* Two columns once there's width for it, so the list fills the page instead of
+   running as one narrow strip down the left. */
+@media (min-width: 860px) {
+  .list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 48px;
+  }
+}
+
 .item {
   display: grid;
   grid-template-columns: 38px 1fr 68px;
@@ -63,8 +80,18 @@ import { projects } from '../config'
   border-bottom: 1px solid var(--rule);
 }
 
-.item:last-child {
-  border-bottom: none;
+/* In the two-column grid, clear the bottom rule from the final row (both
+   cells) rather than only the last DOM item. */
+@media (min-width: 860px) {
+  .item:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 859px) {
+  .item:last-child {
+    border-bottom: none;
+  }
 }
 
 .idx,

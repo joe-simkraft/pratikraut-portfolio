@@ -2,8 +2,12 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import GlitchTitle from './GlitchTitle.vue'
 import DecryptText from './DecryptText.vue'
+import BootLog from './kit/BootLog.vue'
 import { useDecryptContext } from '../composables/decryptContext'
 import { site } from '../config'
+
+// NEW svg assets (animated, self-contained) loaded as URLs for <img>.
+import scrollCueUrl from '../assets/svg/scroll-cue.svg'
 
 const { markRevealed, forced } = useDecryptContext()
 
@@ -24,39 +28,53 @@ const active = computed(() => started.value || forced.value)
 
 <template>
   <header id="top" class="hero">
-    <GlitchTitle
-      :text="site.domain"
-      :active="active"
-      :cycle-every="site.titleHold"
-    />
-
-    <p class="role">
-      <DecryptText :text="site.role" :active="active" :delay="420" :stagger="30" />
-    </p>
-
-    <p class="tagline">
-      <DecryptText
-        :text="site.tagline"
+    <div class="hero-inner">
+      <GlitchTitle
+        :text="site.domain"
         :active="active"
-        :delay="700"
-        :stagger="7"
-        :hold="220"
-        :jitter="260"
+        :cycle-every="site.titleHold"
       />
-    </p>
 
-    <p class="cue" aria-hidden="true">&darr; scroll to decrypt</p>
+      <p class="role">
+        <DecryptText :text="site.role" :active="active" :delay="420" :stagger="30" />
+      </p>
+
+      <p class="tagline">
+        <DecryptText
+          :text="site.tagline"
+          :active="active"
+          :delay="700"
+          :stagger="7"
+          :hold="220"
+          :jitter="260"
+        />
+      </p>
+
+      <div class="cue" aria-hidden="true">
+        <img :src="scrollCueUrl" width="20" alt="" />
+        <span class="cue-txt">scroll to decrypt</span>
+      </div>
+    </div>
+
+    <BootLog />
   </header>
 </template>
 
 <style scoped>
 .hero {
+  position: relative;
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 90px 0 64px;
+}
+
+/* Keeps the title / copy above the grid + HUD decorations. */
+.hero-inner {
+  position: relative;
+  z-index: 1;
 }
 
 .role {
@@ -76,11 +94,17 @@ const active = computed(() => started.value || forced.value)
 }
 
 .cue {
+  position: relative;
   margin: 54px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 10px;
   letter-spacing: 0.2em;
   color: var(--dim);
 }
+.cue .svg-tag { top: -18px; left: 0; }
+.cue-txt { color: var(--dim); }
 
 @media (max-width: 620px) {
   .hero {
