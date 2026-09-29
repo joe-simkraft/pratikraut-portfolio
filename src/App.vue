@@ -8,6 +8,7 @@ import SkillsSection from './components/SkillsSection.vue'
 import AboutSection from './components/AboutSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import ScreenOverlay from './components/ScreenOverlay.vue'
+import DataStream from './components/kit/DataStream.vue'
 
 // Provided here so every descendant shares one registry, and so nothing
 // persists between app instances.
@@ -18,6 +19,8 @@ provideDecryptContext(outline)
   <a class="skip-link" href="#work">Skip to content</a>
 
   <ProgressRail />
+
+  <DataStream />
 
   <div class="page">
     <HeroSection />
@@ -36,16 +39,17 @@ provideDecryptContext(outline)
 .page {
   position: relative;
   z-index: 1;
-  max-width: 860px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 34px 70px 34px;
 }
 
-/* Room for the fixed rail on the left at wide sizes. */
+/* Room for the fixed rail on the left, and for the data-stream gutter on the
+   right, so content spans the width instead of floating in a narrow column. */
 @media (min-width: 901px) {
   .page {
-    padding-left: 88px;
-    padding-right: 40px;
+    padding-left: 96px;
+    padding-right: 64px;
   }
 }
 

@@ -1,8 +1,11 @@
 :root {
   --bg: #05070a;
   --fg: #e9eef4;
-  --mut: #7d8c9d;
-  --dim: #45525f;
+  /* Kit #07 — contrast pass. --mut/--dim lifted two stops so body copy and
+     metadata clear WCAG AA on the near-black ground. Previous values were
+     #7d8c9d / #45525f. */
+  --mut: #9fb0c1;
+  --dim: #62717f;
   --rule: #19212a;
   --wire: rgba(233, 238, 244, 0.16);
 
@@ -60,4 +63,91 @@ body {
 ::selection {
   background: var(--cyan);
   color: var(--bg);
+}
+
+/*
+  Kit indicator badges. Every decorative element from the "glitch kit" carries
+  one so it can be named in review ("drop 04", "keep 09"). They all share this
+  class — deleting the block, plus the <span class="kit-tag"> lines, strips the
+  labels in one pass once the set is finalised.
+*/
+.kit-tag {
+  position: absolute;
+  z-index: 2;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 2px 5px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/*
+  Review indicators. Two colours so the set can be judged at a glance:
+    .kit-tag  (cyan-ish/dim, existing)  — the OLD canvas "kit" decorations
+    .svg-tag  (red)                     — NEWLY wired-in static SVG assets
+  Both share the badge shape. Delete these classes + their spans (and the
+  legend below) once the final set is chosen.
+*/
+.kit-tag {
+  border-color: rgba(53, 224, 232, 0.32);
+  color: color-mix(in srgb, var(--cyan) 62%, var(--mut));
+}
+
+.svg-tag {
+  position: absolute;
+  z-index: 2;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--red) 68%, var(--mut));
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  border: 1px solid rgba(255, 77, 90, 0.4);
+  border-radius: 2px;
+  padding: 2px 5px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Fixed legend explaining the two indicator colours. */
+.tag-legend {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+.tag-legend b { font-weight: 400; }
+.tag-legend .k { color: var(--cyan); }
+.tag-legend .s { color: var(--red); }
+.tag-legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  margin-right: 7px;
+  vertical-align: -1px;
+}
+.tag-legend .k i { border: 1px solid rgba(53, 224, 232, 0.6); }
+.tag-legend .s i { border: 1px solid rgba(255, 77, 90, 0.6); }
+
+@media (max-width: 900px) {
+  .tag-legend { display: none; }
 }

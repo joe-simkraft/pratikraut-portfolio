@@ -2,6 +2,7 @@
 import SectionShell from './SectionShell.vue'
 import DecryptText from './DecryptText.vue'
 import SkillIcon from './SkillIcon.vue'
+import CircuitTrace from './kit/CircuitTrace.vue'
 import { marks, toRgbTriplet } from '../lib/skillIcons'
 import { skills } from '../config'
 import type { Skill } from '../types'
@@ -28,7 +29,12 @@ function brand(skill: Skill): string {
 </script>
 
 <template>
-  <SectionShell id="skills" label="skills" v-slot="{ revealed }">
+  <SectionShell id="skills" label="skills" divider="b">
+    <template #bg>
+      <CircuitTrace />
+    </template>
+
+    <template #default="{ revealed }">
     <dl class="groups">
       <div v-for="(group, g) in skills" :key="group.label" class="group">
         <dt class="glabel">
@@ -76,6 +82,7 @@ function brand(skill: Skill): string {
         </dd>
       </div>
     </dl>
+    </template>
   </SectionShell>
 </template>
 
